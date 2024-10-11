@@ -71,14 +71,14 @@ public class ClubDetailController {
     public ResponseEntity<?> getClubDetail(@PathVariable("id") Long id){
         return ResponseEntity.ok(clubDetailService.getClubDetailById(id));
     }
-    @GetMapping
+    @GetMapping("/category")
     @Operation(summary = "전체 모임 상세 게시글 조회 by category", description = "전체 모임 상세 게시글을 카테고리로 조회할 때 사용하는 API")
     public ResponseEntity<?> getClubDetailListByType(@RequestParam String category){
         return ResponseEntity.ok(clubDetailService.getClubDetailByType(category));
     }
-    @GetMapping
+    @GetMapping("/club/{clubId}")
     @Operation(summary = "전체 모임 상세 게시글 조회 by 모임Id", description = "전체 모임 상세 게시글을 모임으로 조회할 때 사용하는 API")
-    public ResponseEntity<?> getClubDetailListByClubId(@RequestParam Long clubId){
-        return ResponseEntity.ok(clubDetailService.getClubDetailByClub(clubId));
+    public ResponseEntity<?> getClubDetailListByClubId(@PathVariable("clubId") Long id){
+        return ResponseEntity.ok(clubDetailService.getClubDetailByClub(id));
     }
 }

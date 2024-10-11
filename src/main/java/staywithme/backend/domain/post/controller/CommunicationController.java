@@ -74,7 +74,7 @@ public class CommunicationController {
     public ResponseEntity<?> getCommunication(@PathVariable("id") Long id){
         return ResponseEntity.ok(communicationService.getCommunicationById(id));
     }
-    @GetMapping
+    @GetMapping("/category")
     @Operation(summary = "커뮤니티 조회 by category", description = "커뮤니티 게시글을 카테고리로 조회할 때 사용하는 API")
     public ResponseEntity<?> getCommunicationByCategory(@RequestParam String category){
         return ResponseEntity.ok(communicationService.getCommunicationByCategory(category));

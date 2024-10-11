@@ -76,7 +76,7 @@ public class ClubController {
         return ResponseEntity.ok(clubService.getClubById(id));
     }
 
-    @GetMapping
+    @GetMapping("/category")
     @Operation(summary = "모임 조회 by category", description = "모임을 카테고리로 조회할 때 사용하는 API")
     public ResponseEntity<?> getClubListByCategory(@RequestParam String category){
         return ResponseEntity.ok(clubService.getClubListByCategory(category));
