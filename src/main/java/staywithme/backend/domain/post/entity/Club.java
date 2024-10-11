@@ -26,9 +26,10 @@ public class Club extends BaseTime {
     private String title;
     private String introduction;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="memberId")
-    private Member host;
+    private String host;
+
+    @ManyToMany(mappedBy="clubList")
+    private List<Member> memberList;
 
     @OneToMany(mappedBy="club")
     private final List<ClubDetail> clubDetailList = new ArrayList<>();

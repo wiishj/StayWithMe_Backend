@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,12 @@ import java.nio.file.AccessDeniedException;
 public class CommunicationController {
     private final MemberRepository memberRepository;
     private final CommunicationService communicationService;
+
+    @GetMapping
+    @Operation(summary = "전체 커뮤니티 조회", description = "전체 커뮤니티 글을 조회할 때 사용하는 API")
+    public ResponseEntity<?> getCommunication(){
+        return ResponseEntity.ok(communicationService.getCommunication());
+    }
     @PostMapping
     @Operation(summary = "커뮤니티 생성", description = "커뮤니티 게시글을 생성할 때 사용하는 API")
     @ApiResponses(value={
@@ -67,4 +74,10 @@ public class CommunicationController {
     public ResponseEntity<?> getCommunication(@PathVariable("id") Long id){
         return ResponseEntity.ok(communicationService.getCommunicationById(id));
     }
+    @GetMapping
+    @Operation(summary = "커뮤니티 조회 by category", description = "커뮤니티 게시글을 카테고리로 조회할 때 사용하는 API")
+    public ResponseEntity<?> getCommunicationByCategory(@RequestParam String category){
+        return ResponseEntity.ok(communicationService.getCommunicationByCategory(category));
+    }
+
 }

@@ -14,6 +14,7 @@ import staywithme.backend.domain.post.entity.*;
 import staywithme.backend.domain.post.repository.ClubRepository;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,7 +29,7 @@ public class ClubService {
             throw new BadRequestException();
         }
         Club entity = Club.builder()
-                .host(member)
+                .host(member.getNickname())
                 .address(request.getAddress())
                 .title(request.getTitle())
                 .status(Status.valueOf(request.getStatus().toUpperCase()))
@@ -46,7 +47,7 @@ public class ClubService {
             throw new BadRequestException();
         }
         Club entity = clubRepository.findById(clubId).orElseThrow();
-        if(entity.getHost() != member){
+        if(entity.getHost() != member.getNickname()){
             throw new AccessDeniedException("You are not the owner of this comment");
         }
         entity.setAddress(request.getAddress());
@@ -66,8 +67,23 @@ public class ClubService {
         clubRepository.delete(entity);
     }
 
+    @Transactional
+    public void joinToClub(Long clubId, Member member){
+        Club club = clubRepository.findById(clubId).orElseThrow();
+        member.addClub(club);
+    }
     public ClubResponseDTO getClubById(Long clubId){
         Club entity = clubRepository.findById(clubId).orElseThrow();
         return ClubResponseDTO.from(entity);
+    }
+
+    public List<ClubResponseDTO> getClubList(){
+        List<Club> entityList = clubRepository.findAll();
+        return ClubResponseDTO.fromList(entityList);
+    }
+    public List<ClubResponseDTO> getClubListByCategory(String categoryStr){
+        CategoryClub category = CategoryClub.valueOf(categoryStr.toUpperCase());
+        List<Club> entityList = clubRepository.findByCategory(category);
+        return ClubResponseDTO.fromList(entityList);
     }
 }

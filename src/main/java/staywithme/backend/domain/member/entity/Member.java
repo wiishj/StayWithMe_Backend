@@ -32,7 +32,12 @@ public class Member extends BaseTime {
     @OneToMany(mappedBy="host", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Communication> communicationList = new ArrayList<>();
 
-    @OneToMany(mappedBy="host", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany
+    @JoinTable(
+            name = "club_member",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "club_id")
+    )
     private final List<Club> clubList = new ArrayList<>();
 
     @OneToMany(mappedBy="host", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -57,7 +62,7 @@ public class Member extends BaseTime {
     }
     public void addClub(Club club){
         clubList.add(club);
-        club.setHost(this);
+        club.getMemberList().add(this);
     }
     public void removeClub(Club club){
         clubList.remove(club);

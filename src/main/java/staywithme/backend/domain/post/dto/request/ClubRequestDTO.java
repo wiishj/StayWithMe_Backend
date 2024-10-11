@@ -31,10 +31,12 @@ public class ClubRequestDTO {
     private String address;
     @Schema(description = "SOON or ING or DONE",example = "ing")
     private String status;
+    @Schema(example = "20")
+    private int total;
     public boolean hasNullFields() {
         return Objects.isNull(category) || StringUtils.isEmpty(category) || Objects.isNull(title) || StringUtils.isEmpty(title)
                 || Objects.isNull(introduction) || StringUtils.isEmpty(introduction)
                 || Objects.isNull(address) || StringUtils.isEmpty(address)
-                || Objects.isNull(status) || StringUtils.isEmpty(status);
+                || Objects.isNull(status) || StringUtils.isEmpty(status) || Objects.isNull(total);
     }
 }

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,11 @@ public class ClubController {
     private final MemberRepository memberRepository;
     private final ClubService clubService;
 
+    @GetMapping
+    @Operation(summary = "전체 모임 조회", description = "전체 모임을 조회할 때 사용하는 API")
+    public ResponseEntity<?> getClubList(){
+        return ResponseEntity.ok(clubService.getClubList());
+    }
     @PostMapping
     @Operation(summary = "모임 생성", description = "모임을 생성할 때 사용하는 API")
     @ApiResponses(value={
@@ -68,5 +74,18 @@ public class ClubController {
     })
     public ResponseEntity<?> getClub(@PathVariable("id")Long id){
         return ResponseEntity.ok(clubService.getClubById(id));
+    }
+
+    @GetMapping
+    @Operation(summary = "모임 조회 by category", description = "모임을 카테고리로 조회할 때 사용하는 API")
+    public ResponseEntity<?> getClubListByCategory(@RequestParam String category){
+        return ResponseEntity.ok(clubService.getClubListByCategory(category));
+    }
+    @PostMapping("/{clubId}")
+    @Operation(summary = "모입 가입", description = "모임에 가입할 때 사용하는 API")
+    public ResponseEntity<?> joinToClub(@AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable("clubId") Long id){
+        Member member = memberRepository.findByUsername(customUserDetails.getUsername()).orElseThrow();
+        clubService.joinToClub(id, member);
+        return ResponseEntity.ok("성공적으로 모임에 가입했습니다.");
     }
 }

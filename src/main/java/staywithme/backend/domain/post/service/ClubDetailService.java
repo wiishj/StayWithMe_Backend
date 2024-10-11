@@ -15,6 +15,7 @@ import staywithme.backend.domain.post.repository.ClubDetailRepository;
 import staywithme.backend.domain.post.repository.ClubRepository;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -71,5 +72,21 @@ public class ClubDetailService {
     public ClubDetailResponseDTO getClubDetailById(Long clubDetailId){
         ClubDetail entity = clubDetailRepository.findById(clubDetailId).orElseThrow();
         return ClubDetailResponseDTO.from(entity);
+    }
+
+    public List<ClubDetailResponseDTO> getClubDetail(){
+        List<ClubDetail> entityList = clubDetailRepository.findAll();
+        return ClubDetailResponseDTO.fromList(entityList);
+    }
+    public List<ClubDetailResponseDTO> getClubDetailByClub(Long clubId){
+        Club club = clubRepository.findById(clubId).orElseThrow();
+        List<ClubDetail> entityList = clubDetailRepository.findByClub(club);
+        return ClubDetailResponseDTO.fromList(entityList);
+    }
+
+    public List<ClubDetailResponseDTO> getClubDetailByType(String typeStr){
+        Type type = Type.valueOf(typeStr.toUpperCase());
+        List<ClubDetail> entityList = clubDetailRepository.findByType(type);
+        return ClubDetailResponseDTO.fromList(entityList);
     }
 }

@@ -15,6 +15,7 @@ import staywithme.backend.domain.post.repository.CommentRepository;
 import staywithme.backend.domain.post.repository.CommunicationRepository;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -65,5 +66,16 @@ public class CommunicationService {
     public CommuResponseDTO getCommunicationById(Long commuId){
         Communication entity = communicationRepository.findById(commuId).orElseThrow();
         return CommuResponseDTO.from(entity);
+    }
+
+    public List<CommuResponseDTO> getCommunication(){
+        List<Communication> entityList = communicationRepository.findAll();
+        return CommuResponseDTO.fromList(entityList);
+    }
+
+    public List<CommuResponseDTO> getCommunicationByCategory(String categoryStr){
+        CategoryComm category = CategoryComm.valueOf(categoryStr.toUpperCase());
+        List<Communication> entityList = communicationRepository.findAll();
+        return CommuResponseDTO.fromList(entityList);
     }
 }

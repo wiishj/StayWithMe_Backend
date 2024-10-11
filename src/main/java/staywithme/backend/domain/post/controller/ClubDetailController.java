@@ -29,6 +29,11 @@ public class ClubDetailController {
     private final MemberRepository memberRepository;
     private final ClubDetailService clubDetailService;
 
+    @GetMapping
+    @Operation(summary = "전체 모임 상세 게시글 조회", description = "전체 모임 상세 게시글을 조회할 때 사용하는 API")
+    public ResponseEntity<?> getClubDetailList(){
+        return ResponseEntity.ok(clubDetailService.getClubDetail());
+    }
     @PostMapping
     @Operation(summary = "모임 상세 생성", description = "모임 상세 게시글을 생성할 때 사용하는 API")
     @ApiResponses(value={
@@ -65,5 +70,15 @@ public class ClubDetailController {
     })
     public ResponseEntity<?> getClubDetail(@PathVariable("id") Long id){
         return ResponseEntity.ok(clubDetailService.getClubDetailById(id));
+    }
+    @GetMapping
+    @Operation(summary = "전체 모임 상세 게시글 조회 by category", description = "전체 모임 상세 게시글을 카테고리로 조회할 때 사용하는 API")
+    public ResponseEntity<?> getClubDetailListByType(@RequestParam String category){
+        return ResponseEntity.ok(clubDetailService.getClubDetailByType(category));
+    }
+    @GetMapping
+    @Operation(summary = "전체 모임 상세 게시글 조회 by 모임Id", description = "전체 모임 상세 게시글을 모임으로 조회할 때 사용하는 API")
+    public ResponseEntity<?> getClubDetailListByClubId(@RequestParam Long clubId){
+        return ResponseEntity.ok(clubDetailService.getClubDetailByClub(clubId));
     }
 }

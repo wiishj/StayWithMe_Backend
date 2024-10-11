@@ -3,11 +3,14 @@ package staywithme.backend.domain.post.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import staywithme.backend.domain.post.entity.CategoryComm;
+import staywithme.backend.domain.post.entity.Club;
 import staywithme.backend.domain.post.entity.Communication;
 import staywithme.backend.global.annotation.Enum;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 @Builder
@@ -47,5 +50,10 @@ public class CommuResponseDTO {
                 .save(entity.getSaveList().size())
                 .commentList(CommentResponseDTO.fromList(entity.getCommentList()))
                 .build();
+    }
+    public static List<CommuResponseDTO> fromList(List<Communication> entities){
+        return entities.stream()
+                .map(CommuResponseDTO::from)
+                .collect(Collectors.toList());
     }
 }

@@ -13,6 +13,7 @@ import staywithme.backend.global.annotation.Enum;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -38,20 +39,27 @@ public class ClubResponseDTO {
     @Enum(enumClass = Status.class, ignoreCase = true)
     @Schema(example = "ing")
     private String status;
-    @Schema(example="{}")
+    @Schema(example = "6")
+    private int number;
+    @Schema(example="[]")
     private List<ClubDetailResponseDTO> clubDetailList = new ArrayList<>();
-
     public static ClubResponseDTO from(Club entity){
         return ClubResponseDTO.builder()
                 .id(entity.getId())
                 .created_At(entity.getCreatedAt())
                 .category(entity.getCategory().toString())
-                .host(entity.getHost().getNickname())
+                .host(entity.getHost())
                 .title(entity.getTitle())
                 .introduction(entity.getIntroduction())
                 .address(entity.getAddress())
                 .status(entity.getStatus().toString())
+                .number(entity.getMemberList().size())
                 .clubDetailList(ClubDetailResponseDTO.fromList(entity.getClubDetailList()))
                 .build();
+    }
+    public static List<ClubResponseDTO> fromList(List<Club> entities){
+        return entities.stream()
+                .map(ClubResponseDTO::from)
+                .collect(Collectors.toList());
     }
 }
