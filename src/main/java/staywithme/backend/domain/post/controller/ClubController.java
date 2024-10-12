@@ -1,6 +1,7 @@
 package staywithme.backend.domain.post.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -78,7 +79,7 @@ public class ClubController {
 
     @GetMapping("/category")
     @Operation(summary = "모임 조회 by category", description = "모임을 카테고리로 조회할 때 사용하는 API")
-    public ResponseEntity<?> getClubListByCategory(@RequestParam("category") String category){
+    public ResponseEntity<?> getClubListByCategory(@Parameter(description = "조회할 모임의 카테고리 (SPORT, HOBBY, STUDY 중 하나)") @RequestParam("category") String category){
         return ResponseEntity.ok(clubService.getClubListByCategory(category));
     }
     @PostMapping("/{clubId}")
