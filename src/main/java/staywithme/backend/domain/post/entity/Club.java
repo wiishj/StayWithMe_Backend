@@ -28,8 +28,8 @@ public class Club extends BaseTime {
 
     private String host;
 
-    @ManyToMany(mappedBy="clubList")
-    private List<Member> memberList;
+    @ManyToMany(mappedBy="clubList", fetch=FetchType.EAGER)
+    private List<Member> memberList = new ArrayList<>();
 
     @OneToMany(mappedBy="club")
     private final List<ClubDetail> clubDetailList = new ArrayList<>();

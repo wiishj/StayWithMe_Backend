@@ -56,49 +56,34 @@ public class Member extends BaseTime {
         communicationList.add(communication);
         communication.setHost(this);
     }
-    public void removeCommunication(Communication communication){
-        communicationList.remove(communication);
-        communication.setHost(null);
-    }
-    public void addClub(Club club){
+
+    public void addClubList(Club club){
         clubList.add(club);
-        club.getMemberList().add(this);
-    }
-    public void removeClub(Club club){
-        clubList.remove(club);
-        club.setHost(null);
+        if(club.getMemberList()==null){
+            club.setMemberList(new ArrayList<>());
+            club.getMemberList().add(this);
+        }else{
+            club.getMemberList().add(this);
+        }
     }
     public void addClubDetail(ClubDetail clubDetail){
         clubDetailList.add(clubDetail);
         clubDetail.setHost(this);
     }
-    public void removeClubDetail(ClubDetail clubDetail){
-        clubDetailList.remove(clubDetail);
-        clubDetail.setHost(null);
-    }
+
     public void addComment(Comment comment){
         commentList.add(comment);
         comment.setHost(this);
     }
-    public void removeComment(Comment comment){
-        commentList.remove(comment);
-        comment.setHost(null);
-    }
+
     public void addHeart(Heart heart){
         heartList.add(heart);
         heart.setMember(this);
     }
-    public void removeHeart(Heart heart){
-        heartList.remove(heart);
-        heart.setMember(null);
-    }
+
     public void addSave(Save save){
         saveList.add(save);
         save.setMember(this);
-    }
-    public void removeSave(Save save){
-        saveList.remove(save);
-        save.setMember(null);
     }
 
 
