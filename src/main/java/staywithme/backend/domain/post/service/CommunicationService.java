@@ -75,7 +75,7 @@ public class CommunicationService {
 
     public List<CommuResponseDTO> getCommunicationByCategory(String categoryStr){
         CategoryComm category = CategoryComm.valueOf(categoryStr.toUpperCase());
-        List<Communication> entityList = communicationRepository.findAll();
+        List<Communication> entityList = communicationRepository.findByCategory(category);
         return CommuResponseDTO.fromList(entityList);
     }
 }

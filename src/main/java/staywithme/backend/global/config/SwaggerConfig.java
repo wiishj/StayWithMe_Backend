@@ -22,17 +22,17 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
 
         SecurityScheme securityScheme = new SecurityScheme()
-                .name("JWT")
+                .name("Authorization")
                 .type(SecurityScheme.Type.HTTP)
+                .in(SecurityScheme.In.COOKIE)
                 .scheme("bearer")
                 .bearerFormat("JWT");
 
-        Components components = new Components().addSecuritySchemes("JWT", securityScheme);
-
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList("Bearer Token");
         return new OpenAPI()
-                .components(components)
-                .info(apiInfo())
-                .components(components);
+                .components(new Components().addSecuritySchemes("Bearer Token", securityScheme))
+                .addSecurityItem(securityRequirement)
+                .info(apiInfo());
     }
 
     private Info apiInfo() {
