@@ -25,7 +25,7 @@ public class HeartController {
     private final HeartService heartService;
 
     @PostMapping
-    @Operation(summary = "좋아요 생성", description = "좋아요를 생성할 때 사용하는 API")
+    @Operation(summary = "좋아요 토글", description = "좋아요를 토글할 때 사용하는 API")
     public ResponseEntity<?> toggleHeart(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody HSrequestDTO request) throws BadRequestException {
         Member member = memberRepository.findByUsername(customUserDetails.getUsername()).orElseThrow();
         return ResponseEntity.ok(heartService.toggleHeart(request, member));

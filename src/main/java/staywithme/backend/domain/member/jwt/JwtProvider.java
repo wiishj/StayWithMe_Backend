@@ -38,4 +38,7 @@ public class JwtProvider {
         String role = jwtUtil.getRole(refreshToken);
         return createJWT(role, subject);
     }
+    public void deleteToken(String subject){
+        redisService.deleteValues(subject);
+    }
 }

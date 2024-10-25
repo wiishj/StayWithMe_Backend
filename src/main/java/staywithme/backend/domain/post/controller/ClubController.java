@@ -89,4 +89,11 @@ public class ClubController {
         clubService.joinToClub(id, member);
         return ResponseEntity.ok("성공적으로 모임에 가입했습니다.");
     }
+
+    @GetMapping("/member")
+    @Operation(summary = "모임 조회 by member", description = "모임을 회원으로 조회할 때 사용하는 API")
+    public ResponseEntity<?> getClubListByMember(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        Member member = memberRepository.findByUsername(customUserDetails.getUsername()).orElseThrow();
+        return ResponseEntity.ok(clubService.getClubsByMember(member));
+    }
 }

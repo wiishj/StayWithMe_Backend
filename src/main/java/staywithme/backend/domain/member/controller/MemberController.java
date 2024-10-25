@@ -9,11 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import staywithme.backend.domain.member.dto.JoinRequestDTO;
 import staywithme.backend.domain.member.dto.TokenDTO;
+import staywithme.backend.domain.member.entity.Member;
+import staywithme.backend.domain.member.security.CustomUserDetails;
 import staywithme.backend.domain.member.service.MemberService;
 
 @RestController
@@ -21,6 +22,11 @@ import staywithme.backend.domain.member.service.MemberService;
 @Tag(name="Member", description = "회원 관련 API" )
 public class MemberController {
     private final MemberService memberService;
+
+    @GetMapping("/")
+    public String home(){
+        return "home";
+    }
     @PostMapping("/join")
     @Operation(summary = "회원가입", description = "회원가입할 때 사용하는 API")
     public ResponseEntity<?> join(@RequestBody JoinRequestDTO joinRequestDTO){
@@ -55,4 +61,30 @@ public class MemberController {
 
         return cookie;
     }
+
+    @PostMapping("/logout")
+    @Operation(summary = "토큰 재발급", description = "토큰을 재발급할 때 사용하는 API")
+    public ResponseEntity<?> logout(HttpServletRequest request) throws BadRequestException {
+        String refreshToken = null;
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("refresh")){
+                refreshToken = cookie.getValue();;
+            }
+        }
+        if(refreshToken==null){
+            throw new BadRequestException("refresh token이 없습니다.");
+        }
+        memberService.deleteToken(refreshToken);
+        return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
+
+    @DeleteMapping("/quit")
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴할 때 사용하는 API")
+    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        String username = customUserDetails.getUsername();
+        memberService.deleteMember(username);
+        return ResponseEntity.ok("해당 유저를 정상적으로 탈퇴시켰습니다.");
+    }
+
 }

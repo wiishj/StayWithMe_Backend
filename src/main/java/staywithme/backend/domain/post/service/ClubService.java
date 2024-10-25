@@ -35,6 +35,7 @@ public class ClubService {
                 .status(Status.valueOf(request.getStatus().toUpperCase()))
                 .introduction(request.getIntroduction())
                 .category(CategoryClub.valueOf(request.getCategory().toUpperCase()))
+                .total(request.getTotal())
                 .build();
         clubRepository.save(entity);
         member.addClubList(entity);
@@ -70,6 +71,9 @@ public class ClubService {
     @Transactional
     public void joinToClub(Long clubId, Member member){
         Club club = clubRepository.findById(clubId).orElseThrow();
+        if(member.getClubList().contains(club)){
+            return;
+        }
         member.addClubList(club);
     }
     public ClubResponseDTO getClubById(Long clubId){
@@ -84,6 +88,11 @@ public class ClubService {
     public List<ClubResponseDTO> getClubListByCategory(String categoryStr){
         CategoryClub category = CategoryClub.valueOf(categoryStr.toUpperCase());
         List<Club> entityList = clubRepository.findByCategory(category);
+        return ClubResponseDTO.fromList(entityList);
+    }
+
+    public List<ClubResponseDTO> getClubsByMember(Member member){
+        List<Club> entityList = member.getClubList();
         return ClubResponseDTO.fromList(entityList);
     }
 }

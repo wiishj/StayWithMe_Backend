@@ -57,6 +57,7 @@ public class JWTUtil {
         CustomUserDetails customUserDetails = new CustomUserDetails(member);
         return new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
     }
+
     public String createJwt(String category, String role, String subject, Long expiredMs){
         return Jwts.builder()
                 .claim("category", category)

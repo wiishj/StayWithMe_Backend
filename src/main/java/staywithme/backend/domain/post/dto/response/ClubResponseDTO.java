@@ -30,6 +30,8 @@ public class ClubResponseDTO {
     private String category;
     @Schema(example = "nickname")
     private String host;
+    @Schema(example = "20")
+    private int total;
     @Schema(example = "title")
     private String title;
     @Schema(example = "introduction")
@@ -41,7 +43,8 @@ public class ClubResponseDTO {
     private String status;
     @Schema(example = "6")
     private int number;
-    @Schema(example="[]")
+
+    @Schema(example="{}")
     private List<ClubDetailResponseDTO> clubDetailList = new ArrayList<>();
     public static ClubResponseDTO from(Club entity){
         return ClubResponseDTO.builder()
@@ -49,6 +52,7 @@ public class ClubResponseDTO {
                 .created_At(entity.getCreatedAt())
                 .category(entity.getCategory().toString())
                 .host(entity.getHost())
+                .total(entity.getTotal())
                 .title(entity.getTitle())
                 .introduction(entity.getIntroduction())
                 .address(entity.getAddress())

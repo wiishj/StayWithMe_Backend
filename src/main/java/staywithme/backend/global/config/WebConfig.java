@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000") // 허용할 프론트엔드 도메인
+                .allowedOrigins("http://localhost:3000", "https://stay-w-me.netlify.app") // 허용할 프론트엔드 도메인
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메서드
                 .allowedHeaders("*")
                 .allowCredentials(true)
