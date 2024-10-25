@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import staywithme.backend.domain.member.filter.LoginFilter;
-import staywithme.backend.domain.member.filter.CustomLogoutFilter;
 import staywithme.backend.domain.member.jwt.JWTUtil;
 import staywithme.backend.domain.member.jwt.JwtFilter;
 import staywithme.backend.domain.member.jwt.JwtProvider;
@@ -56,6 +55,7 @@ public class SecurityConfig {
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .logout((logout)->logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/")
                         .invalidateHttpSession(true))
                 .sessionManagement((session)->session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
