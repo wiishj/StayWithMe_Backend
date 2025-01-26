@@ -13,7 +13,7 @@ import java.time.YearMonth;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name="pay")
+@Table(name="bill")
 public class Bill extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

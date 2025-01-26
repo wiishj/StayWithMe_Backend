@@ -23,6 +23,7 @@ import staywithme.backend.domain.post.dto.response.PostResponseDTO;
 import staywithme.backend.domain.post.entity.Club;
 import staywithme.backend.domain.post.repository.ClubDetailRepository;
 import staywithme.backend.domain.post.repository.ClubRepository;
+import staywithme.backend.domain.post.repository.CommunityRepository;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
+    private final ClubDetailRepository clubDetailRepository;
+    private final CommunityRepository communityRepository;
     private final JwtProvider jwtProvider;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Transactional
@@ -72,8 +75,8 @@ public class MemberService {
     }
     public PostResponseDTO getPostByMember(String username){
         Member member = memberRepository.findByUsername(username).orElseThrow();
-        List<CommunityResponseDTO> communityList = CommunityResponseDTO.fromList(memberRepository.findCommunityListByMember(member));
-        List<ClubDetailResponseDTO> clubDetailList = ClubDetailResponseDTO.fromList(memberRepository.findClubDetailListByMember(member));
+        List<CommunityResponseDTO> communityList = CommunityResponseDTO.fromList(communityRepository.findByHost(member));
+        List<ClubDetailResponseDTO> clubDetailList = ClubDetailResponseDTO.fromList(clubDetailRepository.findByHost(member));
         PostResponseDTO response = PostResponseDTO.builder()
                 .communityList(communityList)
                 .clubDetailList(clubDetailList)
