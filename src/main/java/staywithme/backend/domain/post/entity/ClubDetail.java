@@ -37,7 +37,7 @@ public class ClubDetail extends BaseTime {
     private final List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy="clubDetail", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Heart> heartList = new ArrayList<>();
+    private final List<Like> likeList = new ArrayList<>();
 
     @OneToMany(mappedBy="clubDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Save> saveList = new ArrayList<>();
@@ -47,9 +47,9 @@ public class ClubDetail extends BaseTime {
         comment.setClubDetail(this);
     }
 
-    public void addHeart(Heart heart){
-        heartList.add(heart);
-        heart.setClubDetail(this);
+    public void addLike(Like like){
+        likeList.add(like);
+        like.setClubDetail(this);
     }
 
     public void addSave(Save save){

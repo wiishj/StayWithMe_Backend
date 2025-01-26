@@ -9,8 +9,8 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@Schema(description = "communication request")
-public class CommuRequestDTO {
+@Schema(description = "community request")
+public class CommunityRequestDTO {
     @Schema(description = "QUESTION or TIP or SHARING or FREE", example = "question")
     private String category;
     @Schema(example = "title")

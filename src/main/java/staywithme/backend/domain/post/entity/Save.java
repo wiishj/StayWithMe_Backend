@@ -23,8 +23,8 @@ public class Save extends BaseTime {
     private ClubDetail clubDetail;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="communicationId")
-    private Communication communication;
+    @JoinColumn(name="communityId")
+    private Community community;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="memberId")

@@ -29,22 +29,17 @@ public class Comment extends BaseTime {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="communicationId")
-    private Communication communication;
+    private Community community;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="clubDetailId")
     private ClubDetail clubDetail;
 
     @OneToMany(mappedBy="comment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Heart> heartList = new ArrayList<>();
+    private final List<Like> likeList = new ArrayList<>();
 
-    public void addHeart(Heart heart){
-        heartList.add(heart);
-        heart.setComment(this);
+    public void addLike(Like like){
+        likeList.add(like);
+        like.setComment(this);
     }
-    public void removeHeart(Heart heart){
-        heartList.remove(heart);
-        heart.setComment(null);
-    }
-
 }

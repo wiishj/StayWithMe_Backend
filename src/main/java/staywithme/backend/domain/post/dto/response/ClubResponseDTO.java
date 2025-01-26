@@ -44,7 +44,65 @@ public class ClubResponseDTO {
     @Schema(example = "6")
     private int number;
 
-    @Schema(example="{}")
+    @Schema(example="[\n" +
+            "        {\n" +
+            "            \"id\": 1,\n" +
+            "            \"created_At\": \"2025-01-24T23:45:49.275249\",\n" +
+            "            \"type\": \"NOTIFICATION\",\n" +
+            "            \"title\": \"title\",\n" +
+            "            \"content\": \"content\",\n" +
+            "            \"host\": \"nickname\",\n" +
+            "            \"heart\": 0,\n" +
+            "            \"save\": 0,\n" +
+            "            \"commentList\": [\n" +
+            "                {\n" +
+            "                    \"id\": 4,\n" +
+            "                    \"created_At\": \"2025-01-24T23:47:09.415852\",\n" +
+            "                    \"content\": \"content\",\n" +
+            "                    \"host\": \"nickname\",\n" +
+            "                    \"heart\": 0\n" +
+            "                }\n" +
+            "            ]\n" +
+            "        },\n" +
+            "        {\n" +
+            "            \"id\": 2,\n" +
+            "            \"created_At\": \"2025-01-24T23:45:52.266453\",\n" +
+            "            \"type\": \"NOTIFICATION\",\n" +
+            "            \"title\": \"title\",\n" +
+            "            \"content\": \"content\",\n" +
+            "            \"host\": \"nickname\",\n" +
+            "            \"heart\": 1,\n" +
+            "            \"save\": 0,\n" +
+            "            \"commentList\": [\n" +
+            "                {\n" +
+            "                    \"id\": 5,\n" +
+            "                    \"created_At\": \"2025-01-24T23:47:20.007721\",\n" +
+            "                    \"content\": \"content\",\n" +
+            "                    \"host\": \"nickname\",\n" +
+            "                    \"heart\": 0\n" +
+            "                }\n" +
+            "            ]\n" +
+            "        },\n" +
+            "        {\n" +
+            "            \"id\": 3,\n" +
+            "            \"created_At\": \"2025-01-24T23:45:53.388028\",\n" +
+            "            \"type\": \"NOTIFICATION\",\n" +
+            "            \"title\": \"title\",\n" +
+            "            \"content\": \"content\",\n" +
+            "            \"host\": \"nickname\",\n" +
+            "            \"heart\": 1,\n" +
+            "            \"save\": 0,\n" +
+            "            \"commentList\": [\n" +
+            "                {\n" +
+            "                    \"id\": 6,\n" +
+            "                    \"created_At\": \"2025-01-24T23:47:23.211299\",\n" +
+            "                    \"content\": \"content\",\n" +
+            "                    \"host\": \"nickname\",\n" +
+            "                    \"heart\": 1\n" +
+            "                }\n" +
+            "            ]\n" +
+            "        }\n" +
+            "    ]")
     private List<ClubDetailResponseDTO> clubDetailList = new ArrayList<>();
     public static ClubResponseDTO from(Club entity){
         return ClubResponseDTO.builder()

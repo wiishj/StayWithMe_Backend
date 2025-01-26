@@ -32,10 +32,18 @@ public class ClubDetailResponseDTO {
     @Schema(example = "nickname")
     private String host;
     @Schema(example = "0")
-    private int heart;
+    private int like;
     @Schema(example = "0")
     private int save;
-    @Schema(example = "{}")
+    @Schema(example = "[\n" +
+            "        {\n" +
+            "            \"id\": 4,\n" +
+            "            \"created_At\": \"2025-01-24T23:47:09.415852\",\n" +
+            "            \"content\": \"content\",\n" +
+            "            \"host\": \"nickname\",\n" +
+            "            \"heart\": 0\n" +
+            "        }\n" +
+            "    ]")
     private List<CommentResponseDTO> commentList;
 
     public static ClubDetailResponseDTO from(ClubDetail entity){
@@ -46,7 +54,7 @@ public class ClubDetailResponseDTO {
                 .title(entity.getTitle())
                 .content(entity.getContent())
                 .host(entity.getHost().getNickname())
-                .heart(entity.getHeartList().size())
+                .like(entity.getLikeList().size())
                 .save(entity.getSaveList().size())
                 .commentList(CommentResponseDTO.fromList(entity.getCommentList()))
                 .build();

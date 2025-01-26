@@ -19,6 +19,7 @@ import staywithme.backend.domain.member.filter.LoginFilter;
 import staywithme.backend.domain.member.jwt.JWTUtil;
 import staywithme.backend.domain.member.jwt.JwtFilter;
 import staywithme.backend.domain.member.jwt.JwtProvider;
+import staywithme.backend.domain.member.repository.MemberRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +28,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final JwtProvider jwtProvider;
+    private final MemberRepository memberRepository;
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
 
@@ -52,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/", "/join", "/login", "/reissue", "/logout").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class)
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtProvider, memberRepository), UsernamePasswordAuthenticationFilter.class)
                 .logout((logout)->logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessUrl("/")

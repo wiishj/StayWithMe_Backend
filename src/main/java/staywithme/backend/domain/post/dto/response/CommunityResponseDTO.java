@@ -3,8 +3,7 @@ package staywithme.backend.domain.post.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import staywithme.backend.domain.post.entity.CategoryComm;
-import staywithme.backend.domain.post.entity.Club;
-import staywithme.backend.domain.post.entity.Communication;
+import staywithme.backend.domain.post.entity.Community;
 import staywithme.backend.global.annotation.Enum;
 
 import java.time.LocalDateTime;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommuResponseDTO {
+public class CommunityResponseDTO {
     @Schema(example = "1")
     private Long id;
     @Schema(example="2024-10-10T10:15:30")
@@ -31,29 +30,43 @@ public class CommuResponseDTO {
     @Schema(example = "content")
     private String content;
     @Schema(example = "0")
-    private int heart;
+    private int like;
     @Schema(example = "0")
     private int save;
-    @Schema(example="{}")
+    @Schema(example="[\n" +
+            "        {\n" +
+            "            \"id\": 1,\n" +
+            "            \"created_At\": \"2025-01-24T23:46:56.624033\",\n" +
+            "            \"content\": \"content\",\n" +
+            "            \"host\": \"nickname\",\n" +
+            "            \"heart\": 1\n" +
+            "        },\n" +
+            "        {\n" +
+            "            \"id\": 2,\n" +
+            "            \"created_At\": \"2025-01-24T23:46:58.654961\",\n" +
+            "            \"content\": \"content\",\n" +
+            "            \"host\": \"nickname\",\n" +
+            "            \"heart\": 0\n" +
+            "        }]")
     private List<CommentResponseDTO> commentList;
 
-    public static CommuResponseDTO from(Communication entity){
+    public static CommunityResponseDTO from(Community entity){
 
-        return CommuResponseDTO.builder()
+        return CommunityResponseDTO.builder()
                 .id(entity.getId())
                 .created_At(entity.getCreatedAt())
                 .category(entity.getCategory().toString())
                 .host(entity.getHost().getNickname())
                 .title(entity.getTitle())
                 .content(entity.getContent())
-                .heart(entity.getHeartList().size())
+                .like(entity.getLikeList().size())
                 .save(entity.getSaveList().size())
                 .commentList(CommentResponseDTO.fromList(entity.getCommentList()))
                 .build();
     }
-    public static List<CommuResponseDTO> fromList(List<Communication> entities){
+    public static List<CommunityResponseDTO> fromList(List<Community> entities){
         return entities.stream()
-                .map(CommuResponseDTO::from)
+                .map(CommunityResponseDTO::from)
                 .collect(Collectors.toList());
     }
 }

@@ -30,7 +30,7 @@ public class Member extends BaseTime {
     private String nameAdr;
 
     @OneToMany(mappedBy="host", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Communication> communicationList = new ArrayList<>();
+    private final List<Community> communityList = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -46,17 +46,23 @@ public class Member extends BaseTime {
     @OneToMany(mappedBy="host", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Comment> commentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Bill> billList = new ArrayList<>();
+
     @OneToMany(mappedBy="member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Heart> heartList = new ArrayList<>();
+    private final List<Like> likeList = new ArrayList<>();
 
     @OneToMany(mappedBy="member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Save> saveList = new ArrayList<>();
     //==연관관계 메서드==//
-    public void addCommunication(Communication communication){
-        communicationList.add(communication);
-        communication.setHost(this);
+    public void addCommunity(Community community){
+        communityList.add(community);
+        community.setHost(this);
     }
-
+    public void addPay(Bill bill){
+        billList.add(bill);
+        bill.setHost(this);
+    }
     public void addClubList(Club club){
         clubList.add(club);
         if(club.getMemberList()==null){
@@ -76,15 +82,6 @@ public class Member extends BaseTime {
         comment.setHost(this);
     }
 
-    public void addHeart(Heart heart){
-        heartList.add(heart);
-        heart.setMember(this);
-    }
-
-    public void addSave(Save save){
-        saveList.add(save);
-        save.setMember(this);
-    }
 
 
 }

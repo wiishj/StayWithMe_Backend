@@ -12,10 +12,10 @@ import staywithme.backend.global.entity.BaseTime;
 @NoArgsConstructor
 @Builder
 @Table(name="heart")
-public class Heart extends BaseTime {
+public class Like extends BaseTime {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="heart_id")
+    @Column(name="like_id")
     private Long id;
 
     @ManyToOne(fetch=FetchType.LAZY)
@@ -23,8 +23,8 @@ public class Heart extends BaseTime {
     private ClubDetail clubDetail;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="communicationId")
-    private Communication communication;
+    @JoinColumn(name="communityId")
+    private Community community;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="commentId")

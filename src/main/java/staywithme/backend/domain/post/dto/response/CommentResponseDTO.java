@@ -23,14 +23,14 @@ public class CommentResponseDTO{
     @Schema(example = "nickname")
     private String host;
     @Schema(example = "0")
-    private int heart;
+    private int like;
     public static CommentResponseDTO from(Comment entity){
         return CommentResponseDTO.builder()
                 .id(entity.getId())
                 .created_At(entity.getCreatedAt())
                 .content(entity.getContent())
                 .host(entity.getHost().getNickname())
-                .heart(entity.getHeartList().size())
+                .like(entity.getLikeList().size())
                 .build();
     }
     public static List<CommentResponseDTO> fromList(List<Comment> entities){

@@ -8,14 +8,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import staywithme.backend.domain.member.dto.JoinRequestDTO;
+import staywithme.backend.domain.member.dto.MemberRequestDTO;
+import staywithme.backend.domain.member.dto.MemberResponseDTO;
 import staywithme.backend.domain.member.dto.TokenDTO;
 import staywithme.backend.domain.member.entity.HomeType;
 import staywithme.backend.domain.member.entity.Member;
 import staywithme.backend.domain.member.entity.Role;
 import staywithme.backend.domain.member.jwt.JwtProvider;
 import staywithme.backend.domain.member.repository.MemberRepository;
+import staywithme.backend.domain.post.dto.response.ClubDetailResponseDTO;
 import staywithme.backend.domain.post.dto.response.ClubResponseDTO;
+import staywithme.backend.domain.post.dto.response.CommunityResponseDTO;
+import staywithme.backend.domain.post.dto.response.PostResponseDTO;
 import staywithme.backend.domain.post.entity.Club;
+import staywithme.backend.domain.post.repository.ClubDetailRepository;
 import staywithme.backend.domain.post.repository.ClubRepository;
 
 import java.util.List;
@@ -44,7 +50,37 @@ public class MemberService {
                 .build();
         memberRepository.save(member);
     }
+    public MemberResponseDTO getMemberByUsername(String username){
+        Member entity = memberRepository.findByUsername(username).orElseThrow();
+        return MemberResponseDTO.from(entity);
+    }
+    @Transactional
+    public MemberResponseDTO updateMember(String username, MemberRequestDTO request) throws BadRequestException{
+        if(request.hasNullFields()){
+            throw new BadRequestException();
+        }
+        Member entity = memberRepository.findByUsername(username).orElseThrow();
+        entity.setNickname(request.getNickname());
+        entity.setType(HomeType.valueOf(request.getType().toUpperCase()));
+        entity.setZipcode(request.getZipcode());
+        entity.setStreetAdr(request.getStreetAdr());
+        entity.setDetailAdr(request.getDetailAdr());
+        entity.setNameAdr(request.getNameAdr());
 
+        memberRepository.save(entity);
+        return MemberResponseDTO.from(entity);
+    }
+    public PostResponseDTO getPostByMember(String username){
+        Member member = memberRepository.findByUsername(username).orElseThrow();
+        List<CommunityResponseDTO> communityList = CommunityResponseDTO.fromList(memberRepository.findCommunityListByMember(member));
+        List<ClubDetailResponseDTO> clubDetailList = ClubDetailResponseDTO.fromList(memberRepository.findClubDetailListByMember(member));
+        PostResponseDTO response = PostResponseDTO.builder()
+                .communityList(communityList)
+                .clubDetailList(clubDetailList)
+                .build();
+        return response;
+
+    }
     @Transactional
     public TokenDTO reissue(String refreshToken) throws BadRequestException {
         return jwtProvider.reissue(refreshToken);

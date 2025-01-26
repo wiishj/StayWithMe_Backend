@@ -47,7 +47,7 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("default")
                 .pathsToMatch("/**")
-                .pathsToExclude("/login", "/join", "/reissue", "/quit", "/logout")  // /login 경로는 제외
+                .pathsToExclude("/login", "/join", "/reissue", "/quit", "/logout", "/api/member")  // /login 경로는 제외
                 .build();
     }
 
@@ -71,7 +71,7 @@ public class SwaggerConfig {
                                 )
                                 .responses(new ApiResponses()
                                         .addApiResponse("200", new ApiResponse()
-                                                .description("로그인 성공 시 토큰을 반환합니다")
+                                                .description("로그인 성공 시 토큰과 회원정보를 반환합니다")
                                         )
                                         .addApiResponse("401", new ApiResponse()
                                                 .description("로그인 실패 시 에러 메시지를 반환합니다")

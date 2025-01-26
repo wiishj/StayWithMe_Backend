@@ -15,7 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import staywithme.backend.domain.member.dto.MemberResponseDTO;
 import staywithme.backend.domain.member.dto.TokenDTO;
+import staywithme.backend.domain.member.entity.Member;
+import staywithme.backend.domain.member.repository.MemberRepository;
 import staywithme.backend.domain.member.security.CustomUserDetails;
 import staywithme.backend.domain.member.jwt.JWTUtil;
 import staywithme.backend.domain.member.jwt.JwtProvider;
@@ -30,6 +33,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private static final String CONTENT_TYPE = "application/json";
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
+    private final MemberRepository memberRepository;
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
@@ -67,6 +72,18 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         TokenDTO token = jwtProvider.createJWT(role, username);
         response.addHeader("Authorization", "Bearer "+token.getAccessToken());
         response.addCookie(createCookie("refresh", token.getRefreshToken()));
+
+        Member member = memberRepository.findByUsername(username).orElseThrow();
+        try {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            // Jackson ObjectMapper를 사용하여 DTO를 JSON으로 변환
+            new ObjectMapper().writeValue(response.getWriter(), MemberResponseDTO.from(member));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
     private Cookie createCookie(String key, String value) {
 

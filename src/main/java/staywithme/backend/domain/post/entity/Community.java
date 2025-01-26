@@ -14,11 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name="communication")
-public class Communication extends BaseTime {
+@Table(name="community")
+public class Community extends BaseTime {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="communication_id")
+    @Column(name="community_id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -31,29 +31,29 @@ public class Communication extends BaseTime {
     private String title;
     private String content;
 
-    @OneToMany(mappedBy = "communication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy="communication", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Heart> heartList = new ArrayList<>();
+    @OneToMany(mappedBy="community", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Like> likeList = new ArrayList<>();
 
-    @OneToMany(mappedBy="communication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="community", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Save> saveList = new ArrayList<>();
 
     //==연관관계 메서드==//
     public void addComment(Comment comment){
         commentList.add(comment);
-        comment.setCommunication(this);
+        comment.setCommunity(this);
     }
 
-    public void addHeart(Heart heart){
-        heartList.add(heart);
-        heart.setCommunication(this);
+    public void addLike(Like like){
+        likeList.add(like);
+        like.setCommunity(this);
     }
 
     public void addSave(Save save){
         saveList.add(save);
-        save.setCommunication(this);
+        save.setCommunity(this);
     }
 
 
