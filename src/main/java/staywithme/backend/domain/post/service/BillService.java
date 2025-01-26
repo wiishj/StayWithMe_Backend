@@ -24,13 +24,14 @@ public class BillService {
     private final BillRepository billRepository;
     @Transactional
     public BillResponseDTO savePay(BillRequestDTO request, Member member) throws BadRequestException {
-        if(billRepository.findByDate(request.getDate())!=null){
+        if(billRepository.findByYearAndMonth(request.getYear(), request.getMonth())!=null){
             throw new BadRequestException();
         }
         //null field 있을 때 예외처리
         Bill entity = Bill.builder()
                 .host(member)
-                .date(request.getDate())
+                .year(request.getYear())
+                .month(request.getMonth())
                 .rent(request.getRent())
                 .utility(request.getUtility())
                 .internet(request.getInternet())
@@ -39,7 +40,7 @@ public class BillService {
         member.addPay(entity);
         BillResponseDTO response = BillResponseDTO.from(entity);
         response.setTotal(request.getRent()+ request.getUtility()+ request.getInternet());
-        Bill previousMonth = billRepository.findByDate(request.getDate().minusMonths(1)).get(0);
+        Bill previousMonth = billRepository.findByYearAndMonth(request.getYear(), request.getMonth()-1).get(0);
         if(previousMonth==null){
             response.setDifference(null);
         }else{
@@ -62,7 +63,7 @@ public class BillService {
         billRepository.save(entity);
         BillResponseDTO response = BillResponseDTO.from(entity);
         response.setTotal(request.getRent()+ request.getUtility()+ request.getInternet());
-        Bill previousMonth = billRepository.findByDate(request.getDate().minusMonths(1)).get(0);
+        Bill previousMonth = billRepository.findByYearAndMonth(request.getYear(), request.getMonth()-1).get(0);
         if(previousMonth==null){
             response.setDifference(null);
         }else{

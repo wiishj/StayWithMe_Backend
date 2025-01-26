@@ -16,8 +16,10 @@ import java.util.stream.Collectors;
 public class BillResponseDTO {
     @Schema(example = "1")
     private Long id;
-    @Schema(example = "2024-08")
-    private YearMonth date;
+    @Schema(example = "2024")
+    private int year;
+    @Schema(example = "8")
+    private int month;
     @Schema(example = "760000")
     private Integer total;
     @Schema(example = "600000")
@@ -32,7 +34,8 @@ public class BillResponseDTO {
     public static BillResponseDTO from(Bill entity){
         return BillResponseDTO.builder()
                 .id(entity.getId())
-                .date(entity.getDate())
+                .year(entity.getYear())
+                .month(entity.getMonth())
                 .rent(entity.getRent())
                 .utility(entity.getUtility())
                 .internet(entity.getInternet())

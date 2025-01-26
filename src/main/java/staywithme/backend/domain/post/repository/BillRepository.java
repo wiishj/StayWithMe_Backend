@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface BillRepository extends JpaRepository<Bill, Long> {
-    List<Bill> findByDate(YearMonth date);
-    @Query("SELECT b FROM Bill b WHERE b.host = :host AND YEAR(b.date) = :year")
+    List<Bill> findByYearAndMonth(int year, int month);
+    @Query("SELECT b FROM Bill b WHERE b.host = :host AND b.year = :year")
     List<Bill> findByDate_YearAndHost(@Param("year") int year, @Param("host") Member host);
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import staywithme.backend.domain.member.entity.Member;
 import staywithme.backend.global.entity.BaseTime;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 @Entity
@@ -22,7 +23,8 @@ public class Bill extends BaseTime {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="memberId")
     private Member host;
-    private YearMonth date;
+    private int year;
+    private int month;
     private Integer rent;
     private Integer utility;
     private Integer internet;

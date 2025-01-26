@@ -10,8 +10,10 @@ import java.time.YearMonth;
 @Setter
 @Schema(description = "pay request")
 public class BillRequestDTO {
-    @Schema(example = "2024-08")
-    private YearMonth date;
+    @Schema(example = "2024")
+    private int year;
+    @Schema(example = "8")
+    private int month;
     @Schema(example = "600000")
     private Integer rent;
     @Schema(example = "150000")
