@@ -37,7 +37,7 @@ public class MemberController {
     }
     @PostMapping("/join")
     @Operation(summary = "회원가입", description = "회원가입할 때 사용하는 API")
-    public ResponseEntity<?> join(@RequestBody JoinRequestDTO joinRequestDTO){
+    public ResponseEntity<?> join(@RequestBody JoinRequestDTO joinRequestDTO) throws BadRequestException {
         memberService.join(joinRequestDTO);
         return ResponseEntity.ok("success sign up");
     }

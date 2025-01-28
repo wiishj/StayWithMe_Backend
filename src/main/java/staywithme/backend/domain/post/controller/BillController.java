@@ -31,7 +31,7 @@ public class BillController {
     private final MemberRepository memberRepository;
     private final BillService billService;
 
-    @GetMapping("/{year}")
+    @GetMapping("")
     @Operation(summary = "해당 연도 납부 조회", description = "해당 연도 납부를 조회할 때 사용하는 API")
     @ApiResponse(
             responseCode = "200",
@@ -44,7 +44,7 @@ public class BillController {
                     )
             }
     )
-    public ResponseEntity<?> getClubList(@AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable("year") int year){
+    public ResponseEntity<?> getClubList(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam("year") int year){
         Member member = memberRepository.findByUsername(customUserDetails.getUsername()).orElseThrow();
         return ResponseEntity.ok(billService.getBillByDate(year, member));
     }

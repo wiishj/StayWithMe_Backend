@@ -18,7 +18,7 @@ import java.time.YearMonth;
 public class Bill extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="pay_id")
+    @Column(name="bill_id")
     private Long id;
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="memberId")

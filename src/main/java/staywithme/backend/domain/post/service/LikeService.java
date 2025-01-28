@@ -1,5 +1,6 @@
 package staywithme.backend.domain.post.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -26,18 +27,20 @@ public class LikeService{
     private final CommentRepository commentRepository;
     private final CommunityRepository communityRepository;
     private final ClubDetailRepository clubDetailRepository;
-
+    private final EntityManager entityManager;
     @Transactional
     public CommunityResponseDTO toggleHeartByCommunity(Long commuId, Member member) throws BadRequestException {
         Community community = communityRepository.findById(commuId).orElseThrow();
         Like like = likeRepository.findByMemberAndCommunity(member, community);
         if(like==null){
-            return addFromCommunity(community, member);
+            addFromCommunity(community, member);
         }else{
-            return deleteFromCommu(community, like);
+            likeRepository.delete(like);
+            entityManager.flush();
         }
+        return CommunityResponseDTO.from(community);
     }
-    private CommunityResponseDTO addFromCommunity(Community community, Member member){
+    private void addFromCommunity(Community community, Member member){
         Like entity = Like.builder()
                 .member(member)
                 .build();
@@ -47,24 +50,20 @@ public class LikeService{
 
         community.addLike(entity);
         likeRepository.save(entity);
-        return CommunityResponseDTO.from(community);
-    }
-
-    private CommunityResponseDTO deleteFromCommu(Community community, Like like){
-        likeRepository.delete(like);
-        return CommunityResponseDTO.from(community);
     }
     @Transactional
     public ClubDetailResponseDTO toggleLikeByClubDetail(Long clubDetailId, Member member) throws BadRequestException {
         ClubDetail clubDetail = clubDetailRepository.findById(clubDetailId).orElseThrow();
         Like like = likeRepository.findByMemberAndClubDetail(member, clubDetail);
         if(like==null){
-            return addFromClubDetail(clubDetail, member);
+            addFromClubDetail(clubDetail, member);
         }else{
-            return deleteFromClubDetail(clubDetail, like);
+            likeRepository.delete(like);
+            entityManager.flush();
         }
+        return ClubDetailResponseDTO.from(clubDetail);
     }
-    private ClubDetailResponseDTO addFromClubDetail(ClubDetail clubDetail, Member member){
+    private void addFromClubDetail(ClubDetail clubDetail, Member member){
         Like entity = Like.builder()
                 .member(member)
                 .build();
@@ -75,11 +74,6 @@ public class LikeService{
 
         clubDetail.addLike(entity);
         likeRepository.save(entity);
-        return ClubDetailResponseDTO.from(clubDetail);
-    }
-    private ClubDetailResponseDTO deleteFromClubDetail(ClubDetail clubDetail, Like like){
-        likeRepository.delete(like);
-        return ClubDetailResponseDTO.from(clubDetail);
     }
 
     @Transactional
@@ -87,13 +81,15 @@ public class LikeService{
         Comment comment = commentRepository.findById(commentId).orElseThrow();
         Like like = likeRepository.findByMemberAndComment(member, comment);
         if(like==null){
-            return addFromComment(comment, member);
+            addFromComment(comment, member);
         }else{
-            return deleteFromComment(comment, like);
+            likeRepository.delete(like);
+            entityManager.flush();
         }
+        return CommentResponseDTO.from(comment);
     }
 
-    private CommentResponseDTO addFromComment(Comment comment, Member member){
+    private void addFromComment(Comment comment, Member member){
         Like entity = Like.builder()
                 .member(member)
                 .build();
@@ -104,11 +100,6 @@ public class LikeService{
 
         comment.addLike(entity);
         likeRepository.save(entity);
-        return CommentResponseDTO.from(comment);
-    }
-    private CommentResponseDTO deleteFromComment(Comment comment, Like like){
-        likeRepository.delete(like);
-        return CommentResponseDTO.from(comment);
     }
 
     public List<CommunityResponseDTO> getCommuByMember(Member member){

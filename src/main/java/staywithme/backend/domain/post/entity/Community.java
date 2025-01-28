@@ -24,7 +24,7 @@ public class Community extends BaseTime {
     @Enumerated(EnumType.STRING)
     private CategoryComm category;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="memberId")
     private Member host;
 

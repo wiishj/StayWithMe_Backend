@@ -11,7 +11,7 @@ import staywithme.backend.global.entity.BaseTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name="heart")
+@Table(name = "`like`")
 public class Like extends BaseTime {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

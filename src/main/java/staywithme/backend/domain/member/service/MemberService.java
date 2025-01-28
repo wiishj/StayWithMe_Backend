@@ -39,19 +39,24 @@ public class MemberService {
     private final JwtProvider jwtProvider;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Transactional
-    public void join(JoinRequestDTO requestDTO){
-        Member member = Member.builder()
-                .username(requestDTO.getUsername())
-                .password(bCryptPasswordEncoder.encode(requestDTO.getPassword()))
-                .nickname(requestDTO.getNickname())
-                .role(Role.ROLE_USER)
-                .type(HomeType.valueOf(requestDTO.getType().toUpperCase()))
-                .zipcode(requestDTO.getZipcode())
-                .streetAdr(requestDTO.getStreetAdr())
-                .detailAdr(requestDTO.getDetailAdr())
-                .nameAdr(requestDTO.getNameAdr())
-                .build();
-        memberRepository.save(member);
+    public void join(JoinRequestDTO requestDTO) throws BadRequestException {
+        if(memberRepository.findByUsername(requestDTO.getUsername()).isEmpty()){
+            Member member = Member.builder()
+                    .username(requestDTO.getUsername())
+                    .password(bCryptPasswordEncoder.encode(requestDTO.getPassword()))
+                    .nickname(requestDTO.getNickname())
+                    .role(Role.ROLE_USER)
+                    .type(HomeType.valueOf(requestDTO.getType().toUpperCase()))
+                    .zipcode(requestDTO.getZipcode())
+                    .streetAdr(requestDTO.getStreetAdr())
+                    .detailAdr(requestDTO.getDetailAdr())
+                    .nameAdr(requestDTO.getNameAdr())
+                    .build();
+            memberRepository.save(member);
+        }else{
+            throw new BadRequestException("이미 존재하는 username 입니다.");
+        }
+
     }
     public MemberResponseDTO getMemberByUsername(String username){
         Member entity = memberRepository.findByUsername(username).orElseThrow();
@@ -75,7 +80,9 @@ public class MemberService {
     }
     public PostResponseDTO getPostByMember(String username){
         Member member = memberRepository.findByUsername(username).orElseThrow();
+        log.info("여기까지 왔다......");
         List<CommunityResponseDTO> communityList = CommunityResponseDTO.fromList(communityRepository.findByHost(member));
+        log.info("find communityList");
         List<ClubDetailResponseDTO> clubDetailList = ClubDetailResponseDTO.fromList(clubDetailRepository.findByHost(member));
         PostResponseDTO response = PostResponseDTO.builder()
                 .communityList(communityList)

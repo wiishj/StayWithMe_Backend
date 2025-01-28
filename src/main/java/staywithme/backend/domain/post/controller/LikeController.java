@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/heart")
+@RequestMapping("/api/like")
 @Tag(name="Like", description = "좋아요 관련 API, Like로 할걸 왜 Heart했딩" )
 public class LikeController {
     private final MemberRepository memberRepository;
@@ -40,7 +40,7 @@ public class LikeController {
         Member member = memberRepository.findByUsername(customUserDetails.getUsername()).orElseThrow();
         return ResponseEntity.ok(likeService.toggleHeartByCommunity(id, member));
     }
-    @PostMapping("/clubDetail/{id}")
+    @PostMapping("/clubdetail/{id}")
     @Operation(summary = "모임상세 좋아요 토글", description = "모임상세 글의 좋아요를 토글할 때 사용하는 API")
     @ApiResponses(value={
             @ApiResponse(responseCode="200", content = {@Content(schema= @Schema(implementation = ClubDetailResponseDTO.class)

@@ -1,5 +1,6 @@
 package staywithme.backend.domain.post.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
@@ -23,18 +24,22 @@ public class SaveService {
     private final SaveRepository saveRepository;
     private final CommunityRepository communityRepository;
     private final ClubDetailRepository clubDetailRepository;
+    private final EntityManager entityManager;
 
     @Transactional
     public CommunityResponseDTO toggleSaveByCommunity(Long commuId, Member member) throws BadRequestException {
         Community community = communityRepository.findById(commuId).orElseThrow();
         Save save = saveRepository.findByMemberAndCommunity(member, community);
         if(save==null){
-            return addFromCommu(community, member);
+            addFromCommu(community, member);
+
         }else{
-            return deleteFromCommu(community, save);
+            saveRepository.delete(save);
+            entityManager.flush();
         }
+        return CommunityResponseDTO.from(community);
     }
-    private CommunityResponseDTO addFromCommu(Community community, Member member){
+    private void addFromCommu(Community community, Member member){
         Save entity = Save.builder()
                 .member(member)
                 .build();
@@ -43,24 +48,20 @@ public class SaveService {
         entity.setClubDetail(null);
         community.addSave(entity);
         saveRepository.save(entity);
-        return CommunityResponseDTO.from(community);
-    }
-
-    private CommunityResponseDTO deleteFromCommu(Community community, Save save){
-        saveRepository.delete(save);
-        return CommunityResponseDTO.from(community);
     }
     @Transactional
     public ClubDetailResponseDTO toggleSaveByClubDetail(Long clubDetailId, Member member) throws BadRequestException {
         ClubDetail clubDetail = clubDetailRepository.findById(clubDetailId).orElseThrow();
         Save save = saveRepository.findByMemberAndClubDetail(member, clubDetail);
         if(save==null){
-            return addFromClubDetail(clubDetail, member);
+            addFromClubDetail(clubDetail, member);
         }else{
-            return deleteFromClubDetail(clubDetail, save);
+            saveRepository.delete(save);
+            entityManager.flush();
         }
+        return ClubDetailResponseDTO.from(clubDetail);
     }
-    private ClubDetailResponseDTO addFromClubDetail(ClubDetail clubDetail, Member member){
+    private void addFromClubDetail(ClubDetail clubDetail, Member member){
         Save entity = Save.builder()
                 .member(member)
                 .build();
@@ -69,11 +70,6 @@ public class SaveService {
         entity.setCommunity(null);
         clubDetail.addSave(entity);
         saveRepository.save(entity);
-        return ClubDetailResponseDTO.from(clubDetail);
-    }
-    private ClubDetailResponseDTO deleteFromClubDetail(ClubDetail clubDetail, Save save){
-        saveRepository.delete(save);
-        return ClubDetailResponseDTO.from(clubDetail);
     }
 
     public List<CommunityResponseDTO> getCommuByMember(Member member){

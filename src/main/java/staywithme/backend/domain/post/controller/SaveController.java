@@ -39,7 +39,7 @@ public class SaveController {
         Member member = memberRepository.findByUsername(customUserDetails.getUsername()).orElseThrow();
         return ResponseEntity.ok(saveService.toggleSaveByCommunity(id, member));
     }
-    @PostMapping("/clubDetail/{id}")
+    @PostMapping("/clubdetail/{id}")
     @Operation(summary = "모임상세 스크랩 토글", description = "모임상세 글의 스크랩을 토글할 때 사용하는 API")
     @ApiResponses(value={
             @ApiResponse(responseCode="200", content = {@Content(schema= @Schema(implementation = ClubDetailResponseDTO.class)

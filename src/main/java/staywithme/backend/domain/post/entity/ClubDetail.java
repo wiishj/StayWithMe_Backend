@@ -25,7 +25,7 @@ public class ClubDetail extends BaseTime {
     private Type type;
     private String title;
     private String content;
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="memberId")
     private Member host;
 
