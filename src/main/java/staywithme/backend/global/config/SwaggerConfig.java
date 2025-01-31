@@ -47,7 +47,7 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("default")
                 .pathsToMatch("/**")
-                .pathsToExclude("/login", "/join", "/reissue", "/quit", "/logout", "/api/member")  // /login 경로는 제외
+                .pathsToExclude("/login", "/join", "/reissue", "/quit", "/logout")  // /login 경로는 제외
                 .build();
     }
 
